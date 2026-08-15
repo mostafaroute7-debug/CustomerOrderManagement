@@ -15,10 +15,14 @@ namespace CustomerOrderManagement.Infrastructure.Data.Repositories
 
         public IQueryable<Order> GetByCustomerId(int customerId)
         {
-            return GetAll()
-                .Where(x =>
-                    x.CustomerOrders
-                     .Any(co => co.CustomerId == customerId));
+            return GetAll().Where(x => x.CustomerOrders.Any(co => co.CustomerId == customerId));
         }
+        public Order GetByIdWithCustomers(int id)
+        {
+            return DbSet
+                .Include("CustomerOrders.Customer")
+                .FirstOrDefault(x => x.Id == id);
+        }
+
     }
 }

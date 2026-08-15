@@ -64,12 +64,14 @@
     <Compile Include="Interfaces\Repositories\IGenaricRepository.cs" />
     <Compile Include="Interfaces\Repositories\IOrderRepository.cs" />
     <Compile Include="Interfaces\Services\ICustomerService.cs" />
+    <Compile Include="Interfaces\Services\IOrderService.cs" />
     <Compile Include="Mapping\MappingProfile.cs" />
     <Compile Include="DTOs\Common\PaginationRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DTOs\Common\PagedResultDto.cs" />
     <Compile Include="DTOs\Common\ResultDto.cs" />
     <Compile Include="Services\CustomerService.cs" />
+    <Compile Include="Services\OrderService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exceptions\" />
