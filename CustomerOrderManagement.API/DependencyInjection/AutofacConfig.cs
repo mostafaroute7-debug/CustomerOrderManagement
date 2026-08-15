@@ -59,6 +59,10 @@ namespace CustomerOrderManagement.API.DependencyInjection
             builder.RegisterType<CustomerService>()
                    .As<ICustomerService>()
                    .InstancePerRequest();
+
+            builder.RegisterType<OrderService>()
+                    .As<IOrderService>()
+                    .InstancePerRequest();
         }
     }
 }

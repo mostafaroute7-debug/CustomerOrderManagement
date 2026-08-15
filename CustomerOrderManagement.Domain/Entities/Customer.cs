@@ -16,7 +16,6 @@ namespace CustomerOrderManagement.Domain.Entities
 
         public string Phone { get; set; }
 
-        public virtual ICollection<CustomerOrder> CustomerOrders { get; set; }
-            = new HashSet<CustomerOrder>();
+        public virtual ICollection<CustomerOrder> CustomerOrders { get; set; } = new HashSet<CustomerOrder>();
     }
 }

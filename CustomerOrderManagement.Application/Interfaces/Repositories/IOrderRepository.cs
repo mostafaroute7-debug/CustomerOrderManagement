@@ -6,5 +6,6 @@ namespace CustomerOrderManagement.Application.Interfaces.Repositories
     public interface IOrderRepository : IGenaricRepository<Order>
     {
         IQueryable<Order> GetByCustomerId(int customerId);
+        Order GetByIdWithCustomers(int id);
     }
 }

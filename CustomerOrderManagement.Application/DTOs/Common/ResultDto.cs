@@ -8,6 +8,7 @@ namespace CustomerOrderManagement.Application.Results
         public string Message { get; set; }
         public T Data { get; set; }
         public List<string> Errors { get; set; }
+        public string ErrorCode { get; set; }
         public ResultDto()
         {
             Errors = new List<string>();
