@@ -3,7 +3,9 @@ using Autofac.Integration.WebApi;
 using AutoMapper;
 using CustomerOrderManagement.Application.Interfaces;
 using CustomerOrderManagement.Application.Interfaces.Repositories;
+using CustomerOrderManagement.Application.Interfaces.Services;
 using CustomerOrderManagement.Application.Mapping;
+using CustomerOrderManagement.Application.Services;
 using CustomerOrderManagement.Infrastructure.Data.Contexts;
 using CustomerOrderManagement.Infrastructure.Data.Repositories;
 using System.Reflection;
@@ -53,6 +55,10 @@ namespace CustomerOrderManagement.API.DependencyInjection
             builder.RegisterInstance(mapperConfiguration.CreateMapper())
                 .As<IMapper>()
                 .SingleInstance();
+
+            builder.RegisterType<CustomerService>()
+                   .As<ICustomerService>()
+                   .InstancePerRequest();
         }
     }
 }
