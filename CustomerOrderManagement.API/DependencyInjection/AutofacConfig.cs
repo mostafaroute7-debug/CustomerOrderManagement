@@ -1,11 +1,13 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
-using CustomerOrderManagement.Application.Interfaces.Repositories;
+using AutoMapper;
 using CustomerOrderManagement.Application.Interfaces;
+using CustomerOrderManagement.Application.Interfaces.Repositories;
+using CustomerOrderManagement.Application.Mapping;
 using CustomerOrderManagement.Infrastructure.Data.Contexts;
+using CustomerOrderManagement.Infrastructure.Data.Repositories;
 using System.Reflection;
 using System.Web.Http;
-using CustomerOrderManagement.Infrastructure.Data.Repositories;
 namespace CustomerOrderManagement.API.DependencyInjection
 {
     public class AutofacConfig
@@ -38,6 +40,19 @@ namespace CustomerOrderManagement.API.DependencyInjection
 
             config.DependencyResolver =
                 new AutofacWebApiDependencyResolver(container);
+
+            var mapperConfiguration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            builder.RegisterInstance(mapperConfiguration)
+                .As<MapperConfiguration>()
+                .SingleInstance();
+
+            builder.RegisterInstance(mapperConfiguration.CreateMapper())
+                .As<IMapper>()
+                .SingleInstance();
         }
     }
 }

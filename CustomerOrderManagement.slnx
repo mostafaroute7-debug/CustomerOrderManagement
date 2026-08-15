@@ -1,6 +1,14 @@
 <Solution>
-  <Project Path="CustomerOrderManagement.API/CustomerOrderManagement.API.csproj" Id="cdcde885-a7d2-4d30-802b-f2805a41a809" />
-  <Project Path="CustomerOrderManagement.Application/CustomerOrderManagement.Application.csproj" Id="ecb71948-b66f-4129-abf8-6170cc218bd2" />
+  <Project Path="CustomerOrderManagement.API/CustomerOrderManagement.API.csproj" Id="cdcde885-a7d2-4d30-802b-f2805a41a809">
+    <BuildDependency Project="CustomerOrderManagement.Application/CustomerOrderManagement.Application.csproj" />
+    <BuildDependency Project="CustomerOrderManagement.Infrastructure/CustomerOrderManagement.Infrastructure.csproj" />
+  </Project>
+  <Project Path="CustomerOrderManagement.Application/CustomerOrderManagement.Application.csproj" Id="ecb71948-b66f-4129-abf8-6170cc218bd2">
+    <BuildDependency Project="CustomerOrderManagement.Domain/CustomerOrderManagement.Domain.csproj" />
+  </Project>
   <Project Path="CustomerOrderManagement.Domain/CustomerOrderManagement.Domain.csproj" Id="27d4bbf2-a7c1-4dea-a1b0-455518aa6072" />
-  <Project Path="CustomerOrderManagement.Infrastructure/CustomerOrderManagement.Infrastructure.csproj" Id="59de4419-bf3d-4653-b396-401b4dc1f036" />
+  <Project Path="CustomerOrderManagement.Infrastructure/CustomerOrderManagement.Infrastructure.csproj" Id="59de4419-bf3d-4653-b396-401b4dc1f036">
+    <BuildDependency Project="CustomerOrderManagement.Application/CustomerOrderManagement.Application.csproj" />
+    <BuildDependency Project="CustomerOrderManagement.Domain/CustomerOrderManagement.Domain.csproj" />
+  </Project>
 </Solution>
