@@ -69,6 +69,10 @@
     <Compile Include="Data\Configurations\CustomerOrderConfiguration.cs" />
     <Compile Include="Data\Configurations\OrderConfiguration.cs" />
     <Compile Include="Data\Contexts\ApplicationDbContext.cs" />
+    <Compile Include="Data\Repositories\CustomerRepository.cs" />
+    <Compile Include="Data\Repositories\GenaricRepository.cs" />
+    <Compile Include="Data\Repositories\OrderRepository.cs" />
+    <Compile Include="Data\Repositories\UnitOfWork.cs" />
     <Compile Include="Identity\ApplicationUser.cs" />
     <Compile Include="Migrations\202608151902267_InitialCreate.cs" />
     <Compile Include="Migrations\202608151902267_InitialCreate.Designer.cs">
