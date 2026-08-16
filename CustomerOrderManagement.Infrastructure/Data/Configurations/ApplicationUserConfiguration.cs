@@ -1,4 +1,4 @@
-﻿using CustomerOrderManagement.Infrastructure.Identity;
+﻿using CustomerOrderManagement.Domain.Entities;
 using System.Data.Entity.ModelConfiguration;
 
 namespace CustomerOrderManagement.Infrastructure.Data.Configurations

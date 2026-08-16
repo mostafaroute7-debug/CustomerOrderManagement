@@ -1,7 +1,7 @@
 ﻿namespace CustomerOrderManagement.Infrastructure.Migrations
 {
+    using CustomerOrderManagement.Domain.Entities;
     using CustomerOrderManagement.Infrastructure.Data.Contexts;
-    using CustomerOrderManagement.Infrastructure.Identity;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
