@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace CustomerOrderManagement.API.Controllers
 {
+    [Authorize]
     [RoutePrefix("api/orders")]
     public class OrdersController : ApiController
     {
@@ -18,6 +19,7 @@ namespace CustomerOrderManagement.API.Controllers
         }
         [HttpGet]
         [Route("")]
+        [Authorize(Roles = "user,admin")]
         public IHttpActionResult GetAll([FromUri] PaginationRequest request)
         {
             var result = _orderService.GetAll(request);
@@ -30,6 +32,7 @@ namespace CustomerOrderManagement.API.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
+        [Authorize(Roles = "user,admin")]
         public IHttpActionResult GetById(int id)
         {
             var result = _orderService.GetById(id);
@@ -42,6 +45,7 @@ namespace CustomerOrderManagement.API.Controllers
 
         [HttpPost]
         [Route("")]
+        [Authorize(Roles = "admin")]
         public IHttpActionResult Create(CreateOrderDto request)
         {
             if (!ModelState.IsValid)
@@ -60,6 +64,7 @@ namespace CustomerOrderManagement.API.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize(Roles = "admin")]
         public IHttpActionResult Update(int id,UpdateOrderDto request)
         {
             if (!ModelState.IsValid)
@@ -84,6 +89,7 @@ namespace CustomerOrderManagement.API.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize(Roles = "admin")]
         public IHttpActionResult Delete(int id)
         {
             var result = _orderService.Delete(id);

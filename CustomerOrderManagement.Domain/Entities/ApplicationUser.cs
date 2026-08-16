@@ -2,7 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 
-namespace CustomerOrderManagement.Infrastructure.Identity
+namespace CustomerOrderManagement.Domain.Entities
 {
     public class ApplicationUser : IdentityUser, IAuditableEntity
     {
@@ -10,6 +10,5 @@ namespace CustomerOrderManagement.Infrastructure.Identity
         public string CreatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public string UpdatedBy { get; set; }
-    
     }
 }
