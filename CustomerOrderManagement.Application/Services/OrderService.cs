@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CustomerOrderManagement.Application.DTOs.Orders;
+using CustomerOrderManagement.Application.Exceptions;
 using CustomerOrderManagement.Application.Interfaces;
 using CustomerOrderManagement.Application.Interfaces.Services;
 using CustomerOrderManagement.Application.Pagination;
@@ -75,12 +76,9 @@ namespace CustomerOrderManagement.Application.Services
 
             if (order == null)
             {
-                return new ResultDto<OrderDto>
-                {
-                    Success = false,
-                    Message = "Order not found.",
-                    ErrorCode = "ORDER_NOT_FOUND"
-                };
+                throw new NotFoundException(
+                    "Order not found.",
+                    "ORDER_NOT_FOUND");
             }
 
             var orderDto = _mapper.Map<OrderDto>(order);
@@ -99,14 +97,10 @@ namespace CustomerOrderManagement.Application.Services
 
             if (!validationResult.IsValid)
             {
-                return new ResultDto<OrderDto>
-                {
-                    Success = false,
-                    Message = "Validation failed.",
-                    Errors = validationResult.Errors
+                throw new Exceptions.ValidationException(
+                    validationResult.Errors
                         .Select(x => x.ErrorMessage)
-                        .ToList()
-                };
+                        .ToList());
             }
 
             var order = _mapper.Map<Order>(request);
@@ -146,26 +140,19 @@ namespace CustomerOrderManagement.Application.Services
 
             if (order == null)
             {
-                return new ResultDto<OrderDto>
-                {
-                    Success = false,
-                    Message = "Order not found.",
-                    ErrorCode = "ORDER_NOT_FOUND"
-                };
+                throw new NotFoundException(
+                    "Order not found.",
+                    "ORDER_NOT_FOUND");
             }
 
             var validationResult = _updateValidator.Validate(request);
 
             if (!validationResult.IsValid)
             {
-                return new ResultDto<OrderDto>
-                {
-                    Success = false,
-                    Message = "Validation failed.",
-                    Errors = validationResult.Errors
+                throw new Exceptions.ValidationException(
+                    validationResult.Errors
                         .Select(x => x.ErrorMessage)
-                        .ToList()
-                };
+                        .ToList());
             }
 
             _mapper.Map(request, order);
@@ -226,13 +213,9 @@ namespace CustomerOrderManagement.Application.Services
 
             if (order == null)
             {
-                return new ResultDto<bool>
-                {
-                    Success = false,
-                    Message = "Order not found.",
-                    ErrorCode = "ORDER_NOT_FOUND",
-                    Data = false
-                };
+                throw new NotFoundException(
+                    "Order not found.",
+                    "ORDER_NOT_FOUND");
             }
 
             foreach (var customerOrder in order.CustomerOrders.ToList())
