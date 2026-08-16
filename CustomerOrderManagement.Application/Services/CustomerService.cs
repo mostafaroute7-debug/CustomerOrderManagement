@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CustomerOrderManagement.Application.DTOs.Customers;
+using CustomerOrderManagement.Application.Exceptions;
 using CustomerOrderManagement.Application.Interfaces;
 using CustomerOrderManagement.Application.Interfaces.Services;
 using CustomerOrderManagement.Application.Pagination;
@@ -76,12 +77,9 @@ namespace CustomerOrderManagement.Application.Services
 
             if (customer == null)
             {
-                return new ResultDto<CustomerDto>
-                {
-                    Success = false,
-                    Message = "Customer not found.",
-                    Data = null
-                };
+                throw new NotFoundException(
+                    "Customer not found.",
+                    "CUSTOMER_NOT_FOUND");
             }
 
             var dto = _mapper.Map<CustomerDto>(customer);
@@ -100,12 +98,10 @@ namespace CustomerOrderManagement.Application.Services
 
             if (!validationResult.IsValid)
             {
-                return new ResultDto<CustomerDto>
-                {
-                    Success = false,
-                    Message = "Validation failed.",
-                    Errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList()
-                };
+                throw new Exceptions.ValidationException(
+                    validationResult.Errors
+                        .Select(x => x.ErrorMessage)
+                        .ToList());
             }
 
             var customer = _mapper.Map<Customer>(request);
@@ -130,25 +126,19 @@ namespace CustomerOrderManagement.Application.Services
 
             if (customer == null)
             {
-                return new ResultDto<CustomerDto>
-                {
-                    Success = false,
-                    Message = "Customer not found."
-                };
+                throw new NotFoundException(
+                    "Customer not found.",
+                    "CUSTOMER_NOT_FOUND");
             }
             var validationResult = _updateValidator.Validate(request);
 
             if (!validationResult.IsValid)
             {
-                return new ResultDto<CustomerDto>
-                {
-                    Success = false,
-                    Message = "Validation failed.",
-                    Errors = validationResult.Errors
+                throw new Exceptions.ValidationException(
+                    validationResult.Errors
                         .Select(x => x.ErrorMessage)
-                        .ToList()
-                };
-            }     
+                        .ToList());
+            }
 
             _mapper.Map(request, customer);
 
@@ -172,12 +162,9 @@ namespace CustomerOrderManagement.Application.Services
 
             if (customer == null)
             {
-                return new ResultDto<bool>
-                {
-                    Success = false,
-                    Message = "Customer not found.",
-                    Data = false
-                };
+                throw new NotFoundException(
+                    "Customer not found.",
+                    "CUSTOMER_NOT_FOUND");
             }
 
             _unitOfWork.Customers.Delete(customer);
