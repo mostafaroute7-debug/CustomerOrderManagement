@@ -1,4 +1,5 @@
-﻿using CustomerOrderManagement.Application.DTOs.Orders;
+﻿using CustomerOrderManagement.API.Helpers;
+using CustomerOrderManagement.Application.DTOs.Orders;
 using CustomerOrderManagement.Application.Interfaces.Services;
 using CustomerOrderManagement.Application.Pagination;
 using System.Net;
@@ -43,6 +44,12 @@ namespace CustomerOrderManagement.API.Controllers
         [Route("")]
         public IHttpActionResult Create(CreateOrderDto request)
         {
+            if (!ModelState.IsValid)
+            {
+                var validationResult = ValidationResponseHelper.Create(this);
+
+                return Content(HttpStatusCode.BadRequest,validationResult);
+            }
             var result = _orderService.Create(request);
 
             if (!result.Success)
@@ -55,6 +62,13 @@ namespace CustomerOrderManagement.API.Controllers
         [Route("{id:int}")]
         public IHttpActionResult Update(int id,UpdateOrderDto request)
         {
+            if (!ModelState.IsValid)
+            {
+                var validationResult =
+                    ValidationResponseHelper.Create(this);
+
+                return Content(HttpStatusCode.BadRequest,validationResult);
+            }
             var result = _orderService.Update(id, request);
 
             if (!result.Success)

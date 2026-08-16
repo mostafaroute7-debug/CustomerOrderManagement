@@ -37,11 +37,21 @@
     <Reference Include="CustomerOrderManagement.Domain">
       <HintPath>..\CustomerOrderManagement.Domain\bin\Debug\CustomerOrderManagement.Domain.dll</HintPath>
     </Reference>
+    <Reference Include="FluentValidation, Version=11.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.11.12.0\lib\netstandard2.0\FluentValidation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,10 +82,13 @@
     <Compile Include="DTOs\Common\ResultDto.cs" />
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Validators\Customers\CreateCustomerValidator.cs" />
+    <Compile Include="Validators\Customers\UpdateCustomerValidator.cs" />
+    <Compile Include="Validators\Orders\CreateOrderValidator.cs" />
+    <Compile Include="Validators\Orders\UpdateOrderValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exceptions\" />
-    <Folder Include="Validators\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
