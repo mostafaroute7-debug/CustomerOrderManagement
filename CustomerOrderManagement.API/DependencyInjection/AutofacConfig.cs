@@ -6,6 +6,7 @@ using CustomerOrderManagement.Application.Interfaces.Repositories;
 using CustomerOrderManagement.Application.Interfaces.Services;
 using CustomerOrderManagement.Application.Mapping;
 using CustomerOrderManagement.Application.Services;
+using CustomerOrderManagement.Application.Validators.Customers;
 using CustomerOrderManagement.Infrastructure.Data.Contexts;
 using CustomerOrderManagement.Infrastructure.Data.Repositories;
 using System.Reflection;
@@ -18,13 +19,13 @@ namespace CustomerOrderManagement.API.DependencyInjection
         {
             var builder = new ContainerBuilder();
 
-            var config = GlobalConfiguration.Configuration;
-
             builder.RegisterApiControllers(
                 Assembly.GetExecutingAssembly());
 
+
             builder.RegisterType<ApplicationDbContext>()
                 .InstancePerRequest();
+
 
             builder.RegisterType<CustomerRepository>()
                 .As<ICustomerRepository>()
@@ -34,35 +35,48 @@ namespace CustomerOrderManagement.API.DependencyInjection
                 .As<IOrderRepository>()
                 .InstancePerRequest();
 
+
             builder.RegisterType<UnitOfWork>()
                 .As<IUnitOfWork>()
                 .InstancePerRequest();
 
-            var container = builder.Build();
 
-            config.DependencyResolver =
-                new AutofacWebApiDependencyResolver(container);
+            builder.RegisterType<CustomerService>()
+                .As<ICustomerService>()
+                .InstancePerRequest();
 
-            var mapperConfiguration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MappingProfile>();
-            });
+            builder.RegisterType<OrderService>()
+                .As<IOrderService>()
+                .InstancePerRequest();
+
+
+            builder.RegisterAssemblyTypes(
+                    typeof(CreateCustomerValidator).Assembly)
+                .Where(t => t.Name.EndsWith("Validator"))
+                .AsImplementedInterfaces()
+                .InstancePerRequest();
+
+
+            var mapperConfiguration =
+                new MapperConfiguration(cfg =>
+                {
+                    cfg.AddProfile<MappingProfile>();
+                });
 
             builder.RegisterInstance(mapperConfiguration)
                 .As<MapperConfiguration>()
                 .SingleInstance();
 
-            builder.RegisterInstance(mapperConfiguration.CreateMapper())
+            builder.RegisterInstance(
+                    mapperConfiguration.CreateMapper())
                 .As<IMapper>()
                 .SingleInstance();
 
-            builder.RegisterType<CustomerService>()
-                   .As<ICustomerService>()
-                   .InstancePerRequest();
 
-            builder.RegisterType<OrderService>()
-                    .As<IOrderService>()
-                    .InstancePerRequest();
+            var container = builder.Build();
+
+            GlobalConfiguration.Configuration.DependencyResolver =
+                new AutofacWebApiDependencyResolver(container);
         }
     }
 }

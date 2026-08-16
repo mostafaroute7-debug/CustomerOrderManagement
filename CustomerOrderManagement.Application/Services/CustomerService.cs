@@ -5,6 +5,7 @@ using CustomerOrderManagement.Application.Interfaces.Services;
 using CustomerOrderManagement.Application.Pagination;
 using CustomerOrderManagement.Application.Results;
 using CustomerOrderManagement.Domain.Entities;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,15 @@ namespace CustomerOrderManagement.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IValidator<CreateCustomerDto> _createValidator;
+        private readonly IValidator<UpdateCustomerDto> _updateValidator;
 
-        public CustomerService(IUnitOfWork unitOfWork,IMapper mapper)
+        public CustomerService(IUnitOfWork unitOfWork,IMapper mapper, IValidator<CreateCustomerDto> createValidator, IValidator<UpdateCustomerDto> updateValidator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         public ResultDto<PagedResultDto<CustomerDto>> GetAll(PaginationRequest request)
@@ -91,25 +96,15 @@ namespace CustomerOrderManagement.Application.Services
 
         public ResultDto<CustomerDto> Create(CreateCustomerDto request)
         {
-            var existingEmail = _unitOfWork.Customers.GetByEmail(request.Email);
+            var validationResult = _createValidator.Validate(request);
 
-            if (existingEmail != null)
+            if (!validationResult.IsValid)
             {
                 return new ResultDto<CustomerDto>
                 {
                     Success = false,
-                    Message = "Customer email already exists."
-                };
-            }
-
-            var existingPhone = _unitOfWork.Customers.GetByPhone(request.Phone);
-
-            if (existingPhone != null)
-            {
-                return new ResultDto<CustomerDto>
-                {
-                    Success = false,
-                    Message = "Customer phone already exists."
+                    Message = "Validation failed.",
+                    Errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList()
                 };
             }
 
@@ -141,28 +136,19 @@ namespace CustomerOrderManagement.Application.Services
                     Message = "Customer not found."
                 };
             }
+            var validationResult = _updateValidator.Validate(request);
 
-            var existingEmail = _unitOfWork.Customers.GetByEmail(request.Email);
-
-            if (existingEmail != null && existingEmail.Id != id)
+            if (!validationResult.IsValid)
             {
                 return new ResultDto<CustomerDto>
                 {
                     Success = false,
-                    Message = "Customer email already exists."
+                    Message = "Validation failed.",
+                    Errors = validationResult.Errors
+                        .Select(x => x.ErrorMessage)
+                        .ToList()
                 };
-            }
-
-            var existingPhone = _unitOfWork.Customers.GetByPhone(request.Phone);
-
-            if (existingPhone != null && existingPhone.Id != id)
-            {
-                return new ResultDto<CustomerDto>
-                {
-                    Success = false,
-                    Message = "Customer phone already exists."
-                };
-            }
+            }     
 
             _mapper.Map(request, customer);
 

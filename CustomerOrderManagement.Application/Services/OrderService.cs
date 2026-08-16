@@ -5,6 +5,7 @@ using CustomerOrderManagement.Application.Interfaces.Services;
 using CustomerOrderManagement.Application.Pagination;
 using CustomerOrderManagement.Application.Results;
 using CustomerOrderManagement.Domain.Entities;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,17 +16,22 @@ namespace CustomerOrderManagement.Application.Services
     {
          private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IValidator<CreateOrderDto> _createValidator;
+        private readonly IValidator<UpdateOrderDto> _updateValidator;
 
         public OrderService(
             IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper,
+            IValidator<CreateOrderDto> createValidator,
+            IValidator<UpdateOrderDto> updateValidator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
-        public ResultDto<PagedResultDto<OrderDto>> GetAll(
-            PaginationRequest request)
+        public ResultDto<PagedResultDto<OrderDto>> GetAll(PaginationRequest request)
         {
             var query = _unitOfWork.Orders.GetAll();
 
@@ -89,45 +95,32 @@ namespace CustomerOrderManagement.Application.Services
 
         public ResultDto<OrderDto> Create(CreateOrderDto request)
         {
-            var customerIds = request.CustomerIds
-                .Distinct()
-                .ToList();
+            var validationResult = _createValidator.Validate(request);
 
-            var customers = _unitOfWork.Customers
-                .GetAll()
-                .Where(x => customerIds.Contains(x.Id))
-                .ToList();
-
-            if (customers.Count != customerIds.Count)
+            if (!validationResult.IsValid)
             {
-                var existingIds = customers
-                    .Select(x => x.Id)
-                    .ToHashSet();
-
-                var missingIds = customerIds
-                    .Where(x => !existingIds.Contains(x))
-                    .ToList();
-
                 return new ResultDto<OrderDto>
                 {
                     Success = false,
-                    Message = "One or more customers were not found.",
-                    ErrorCode = "CUSTOMER_NOT_FOUND",
-                    Errors = missingIds
-                        .Select(x =>
-                            $"Customer with ID {x} was not found.")
+                    Message = "Validation failed.",
+                    Errors = validationResult.Errors
+                        .Select(x => x.ErrorMessage)
                         .ToList()
                 };
             }
 
             var order = _mapper.Map<Order>(request);
 
-            foreach (var customer in customers)
+            var customerIds = request.CustomerIds
+                .Distinct()
+                .ToList();
+
+            foreach (var customerId in customerIds)
             {
                 order.CustomerOrders.Add(
                     new CustomerOrder
                     {
-                        CustomerId = customer.Id
+                        CustomerId = customerId
                     });
             }
 
@@ -146,9 +139,7 @@ namespace CustomerOrderManagement.Application.Services
             };
         }
 
-        public ResultDto<OrderDto> Update(
-            int id,
-            UpdateOrderDto request)
+        public ResultDto<OrderDto> Update(int id,UpdateOrderDto request)
         {
             var order = _unitOfWork.Orders
                 .GetByIdWithCustomers(id);
@@ -163,39 +154,25 @@ namespace CustomerOrderManagement.Application.Services
                 };
             }
 
-            var newCustomerIds = request.CustomerIds
-                .Distinct()
-                .ToHashSet();
+            var validationResult = _updateValidator.Validate(request);
 
-            var customers = _unitOfWork.Customers
-                .GetAll()
-                .Where(x => newCustomerIds.Contains(x.Id))
-                .ToList();
-
-            if (customers.Count != newCustomerIds.Count)
+            if (!validationResult.IsValid)
             {
-                var existingIds = customers
-                    .Select(x => x.Id)
-                    .ToHashSet();
-
-                var missingIds = newCustomerIds
-                    .Where(x => !existingIds.Contains(x))
-                    .ToList();
-
                 return new ResultDto<OrderDto>
                 {
                     Success = false,
-                    Message = "One or more customers were not found.",
-                    ErrorCode = "CUSTOMER_NOT_FOUND",
-                    Errors = missingIds
-                        .Select(x =>
-                            $"Customer with ID {x} was not found.")
+                    Message = "Validation failed.",
+                    Errors = validationResult.Errors
+                        .Select(x => x.ErrorMessage)
                         .ToList()
                 };
             }
 
             _mapper.Map(request, order);
 
+            var newCustomerIds = request.CustomerIds
+                .Distinct()
+                .ToHashSet();
 
             var currentCustomerIds = order.CustomerOrders
                 .Select(x => x.CustomerId)
@@ -212,7 +189,6 @@ namespace CustomerOrderManagement.Application.Services
 
                 order.CustomerOrders.Remove(customerOrder);
             }
-
 
             var customerIdsToAdd = newCustomerIds
                 .Except(currentCustomerIds)
@@ -259,8 +235,7 @@ namespace CustomerOrderManagement.Application.Services
                 };
             }
 
-            foreach (var customerOrder in
-                     order.CustomerOrders.ToList())
+            foreach (var customerOrder in order.CustomerOrders.ToList())
             {
                 order.CustomerOrders.Remove(customerOrder);
             }

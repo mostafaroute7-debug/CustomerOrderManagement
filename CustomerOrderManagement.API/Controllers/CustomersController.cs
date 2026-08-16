@@ -1,10 +1,13 @@
-﻿using CustomerOrderManagement.Application.DTOs.Customers;
+﻿using CustomerOrderManagement.API.Helpers;
+using CustomerOrderManagement.Application.DTOs.Customers;
 using CustomerOrderManagement.Application.Interfaces.Services;
 using CustomerOrderManagement.Application.Pagination;
+using System.Net;
 using System.Web.Http;
 
 namespace CustomerOrderManagement.API.Controllers
 {
+    [RoutePrefix("api/Customers")]
     public class CustomersController : ApiController
     {
         private readonly ICustomerService _customerService;
@@ -29,11 +32,6 @@ namespace CustomerOrderManagement.API.Controllers
         {
             var result = _customerService.GetById(id);
 
-            if (!result.Success)
-            {
-                return NotFound();
-            }
-
             return Ok(result);
         }
 
@@ -41,6 +39,13 @@ namespace CustomerOrderManagement.API.Controllers
         [Route("")]
         public IHttpActionResult Create(CreateCustomerDto request)
         {
+
+            if (!ModelState.IsValid)
+            {
+                var validationResult =ValidationResponseHelper.Create(this);
+
+                return Content(HttpStatusCode.BadRequest,validationResult);
+            }
             var result = _customerService.Create(request);
 
             if (!result.Success)
@@ -57,9 +62,13 @@ namespace CustomerOrderManagement.API.Controllers
         [Route("{id:int}")]
         public IHttpActionResult Update(int id,UpdateCustomerDto request)
         {
-            var result = _customerService.Update(
-                id,
-                request);
+            if (!ModelState.IsValid)
+            {
+                var validationResult = ValidationResponseHelper.Create(this);
+
+                return Content(HttpStatusCode.BadRequest, validationResult);
+            }
+            var result = _customerService.Update(id,request);
 
             if (!result.Success)
             {
@@ -80,8 +89,7 @@ namespace CustomerOrderManagement.API.Controllers
                 return NotFound();
             }
 
-            return StatusCode(
-                System.Net.HttpStatusCode.NoContent);
+            return StatusCode(HttpStatusCode.NoContent);
         }
     }
 }
