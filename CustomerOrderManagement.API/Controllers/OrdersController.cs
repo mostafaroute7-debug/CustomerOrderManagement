@@ -97,7 +97,7 @@ namespace CustomerOrderManagement.API.Controllers
             if (!result.Success)
                 return NotFound();
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(result);
         }
     }
 }
