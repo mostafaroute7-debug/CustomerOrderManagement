@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
 using AutoMapper;
+using CustomerOrderManagement.API.Helpers;
 using CustomerOrderManagement.Application.Authentication;
 using CustomerOrderManagement.Application.Interfaces;
 using CustomerOrderManagement.Application.Interfaces.Repositories;
@@ -58,7 +59,9 @@ namespace CustomerOrderManagement.API.DependencyInjection
                 .As<IOrderService>()
                 .InstancePerRequest();
 
-
+            builder.RegisterType<CurrentUserService>()
+                    .As<ICurrentUserService>()
+                    .InstancePerRequest();
             builder.RegisterAssemblyTypes(
                     typeof(CreateCustomerValidator).Assembly)
                 .Where(t => t.Name.EndsWith("Validator"))

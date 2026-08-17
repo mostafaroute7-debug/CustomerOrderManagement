@@ -13,7 +13,8 @@ namespace CustomerOrderManagement.Application.Mapping
 
             CreateMap<CreateCustomerDto, Customer>();
 
-            CreateMap<UpdateCustomerDto, Customer>();
+            CreateMap<UpdateCustomerDto, Customer>()
+                 .ForMember(dest => dest.Id, opt => opt.Ignore());
 
             CreateMap<Order, OrderDto>();
 
