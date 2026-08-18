@@ -51,18 +51,19 @@ CustomerOrderManagement
 │
 ├── CustomerOrderManagement.Application
 │   ├── DTOs
+│   ├── Authentication
 │   ├── Interfaces
+│   ├── Mapping
 │   ├── Services
 │   ├── Validators
-│   ├── Exceptions
-│   ├── Pagination
-│   └── Results
+│   └── Exceptions
 │
 ├── CustomerOrderManagement.Infrastructure
 │   ├── Data
 │   │   ├── Contexts
 │   │   └── Repositories
 │   ├── Identity
+│   ├── Migrations
 │   └── Security
 │
 └── CustomerOrderManagement.API
@@ -584,7 +585,7 @@ These fields provide basic tracking of entity creation and modification.
 ## 1. Clone the Repository
 
 ```bash
-git clone YOUR_REPOSITORY_URL
+git clone https://github.com/mostafaroute7-debug/CustomerOrderManagement.git
 ```
 
 ```bash
@@ -689,40 +690,6 @@ YOUR_JWT_TOKEN
 
 ---
 
-# 📁 Project Structure
-
-```text
-CustomerOrderManagement
-│
-├── CustomerOrderManagement.API
-│   ├── Controllers
-│   ├── ExceptionHandling
-│   ├── Helpers
-│   └── Logging
-│
-├── CustomerOrderManagement.Application
-│   ├── DTOs
-│   ├── Exceptions
-│   ├── Interfaces
-│   ├── Pagination
-│   ├── Results
-│   ├── Services
-│   └── Validators
-│
-├── CustomerOrderManagement.Domain
-│   ├── Common
-│   └── Entities
-│
-└── CustomerOrderManagement.Infrastructure
-    ├── Data
-    │   ├── Contexts
-    │   └── Repositories
-    ├── Identity
-    └── Security
-```
-
----
-
 # 🎯 Project Goals
 
 The main goal of this project is to demonstrate how to build a maintainable and production-oriented ASP.NET Web API with:
@@ -746,7 +713,7 @@ The main goal of this project is to demonstrate how to build a maintainable and 
 .NET Developer | Backend Developer
 
 * GitHub: `https://github.com/mostafaroute7-debug`
-* LinkedIn: `https://linkedin.com/in/mostafa-hany`
+* LinkedIn: `www.linkedin.com/in/mostafa-hany-43b294232`
 
 ---
 
