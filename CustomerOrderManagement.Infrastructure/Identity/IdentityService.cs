@@ -11,14 +11,12 @@ namespace CustomerOrderManagement.Infrastructure.Identity
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public IdentityService(
-            UserManager<ApplicationUser> userManager)
+        public IdentityService(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
 
-        public ResultDto<ApplicationUser> GetUserByEmail(
-            string email)
+        public ResultDto<ApplicationUser> GetUserByEmail(string email)
         {
             var user = _userManager.FindByEmail(email);
 
@@ -40,9 +38,7 @@ namespace CustomerOrderManagement.Infrastructure.Identity
             };
         }
 
-        public ResultDto<bool> CheckPassword(
-            ApplicationUser user,
-            string password)
+        public ResultDto<bool> CheckPassword(ApplicationUser user,string password)
         {
             if (user == null)
             {
@@ -55,9 +51,7 @@ namespace CustomerOrderManagement.Infrastructure.Identity
                 };
             }
 
-            var valid = _userManager.CheckPassword(
-                user,
-                password);
+            var valid = _userManager.CheckPassword(user, password);
 
             if (!valid)
             {
@@ -78,12 +72,9 @@ namespace CustomerOrderManagement.Infrastructure.Identity
             };
         }
 
-        public ResultDto<string> CreateUser(
-            string email,
-            string password)
+        public ResultDto<string> CreateUser(string email,string password)
         {
-            var existingUser =
-                _userManager.FindByEmail(email);
+            var existingUser = _userManager.FindByEmail(email);
 
             if (existingUser != null)
             {
@@ -106,8 +97,7 @@ namespace CustomerOrderManagement.Infrastructure.Identity
                 CreatedBy = "System"
             };
 
-            var result =
-                _userManager.Create(user, password);
+            var result = _userManager.Create(user, password);
 
             if (!result.Succeeded)
             {
@@ -119,10 +109,7 @@ namespace CustomerOrderManagement.Infrastructure.Identity
                 };
             }
 
-            var roleResult =
-                _userManager.AddToRole(
-                    user.Id,
-                    "user");
+            var roleResult =  _userManager.AddToRole(user.Id,"user");
 
             if (!roleResult.Succeeded)
             {
@@ -144,12 +131,9 @@ namespace CustomerOrderManagement.Infrastructure.Identity
             };
         }
 
-        public ResultDto<string> GetUserRole(
-            string userId)
+        public ResultDto<string> GetUserRole(string userId)
         {
-            var role = _userManager
-                .GetRoles(userId)
-                .FirstOrDefault();
+            var role = _userManager.GetRoles(userId).FirstOrDefault();
 
             if (string.IsNullOrWhiteSpace(role))
             {

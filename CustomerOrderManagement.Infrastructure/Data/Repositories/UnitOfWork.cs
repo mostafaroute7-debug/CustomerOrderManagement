@@ -24,8 +24,6 @@ namespace CustomerOrderManagement.Infrastructure.Data.Repositories
         }
 
         public ICustomerRepository Customers => _customers == null ? new CustomerRepository(_context) : _customers;
-          
-
         public IOrderRepository Orders => _orders == null ? new OrderRepository(_context) : _orders;
             
 

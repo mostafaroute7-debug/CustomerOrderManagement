@@ -13,14 +13,12 @@ namespace CustomerOrderManagement.Infrastructure.Data.Repositories
         }
         public Customer GetByEmail(string email)
         {
-            return GetAll()
-                .FirstOrDefault(x => x.Email == email);
+            return GetAll().FirstOrDefault(x => x.Email == email);
         }
 
         public Customer GetByPhone(string phone)
         {
-            return GetAll()
-                .FirstOrDefault(x => x.Phone == phone);
+            return GetAll().FirstOrDefault(x => x.Phone == phone);
         }
     }
 }

@@ -20,9 +20,7 @@ namespace CustomerOrderManagement.Application.Services
         private readonly IValidator<CreateOrderDto> _createValidator;
         private readonly IValidator<UpdateOrderDto> _updateValidator;
 
-        public OrderService(
-            IUnitOfWork unitOfWork,
-            IMapper mapper,
+        public OrderService(IUnitOfWork unitOfWork,IMapper mapper,
             IValidator<CreateOrderDto> createValidator,
             IValidator<UpdateOrderDto> updateValidator)
         {
@@ -46,8 +44,7 @@ namespace CustomerOrderManagement.Application.Services
 
             var orderDtos = _mapper.Map<List<OrderDto>>(orders);
 
-            var totalPages = (int)Math.Ceiling(
-                (double)totalCount / request.PageSize);
+            var totalPages = (int)Math.Ceiling((double)totalCount / request.PageSize);
 
             var result = new PagedResultDto<OrderDto>
             {
@@ -71,14 +68,11 @@ namespace CustomerOrderManagement.Application.Services
 
         public ResultDto<OrderDto> GetById(int id)
         {
-            var order = _unitOfWork.Orders
-                .GetByIdWithCustomers(id);
+            var order = _unitOfWork.Orders.GetByIdWithCustomers(id);
 
             if (order == null)
             {
-                throw new NotFoundException(
-                    "Order not found.",
-                    "ORDER_NOT_FOUND");
+                throw new NotFoundException("Order not found.","ORDER_NOT_FOUND");
             }
 
             var orderDto = _mapper.Map<OrderDto>(order);
@@ -97,22 +91,16 @@ namespace CustomerOrderManagement.Application.Services
 
             if (!validationResult.IsValid)
             {
-                throw new Exceptions.ValidationException(
-                    validationResult.Errors
-                        .Select(x => x.ErrorMessage)
-                        .ToList());
+                throw new Exceptions.ValidationException(validationResult.Errors.Select(x => x.ErrorMessage).ToList());
             }
 
             var order = _mapper.Map<Order>(request);
 
-            var customerIds = request.CustomerIds
-                .Distinct()
-                .ToList();
+            var customerIds = request.CustomerIds.Distinct().ToList();
 
             foreach (var customerId in customerIds)
             {
-                order.CustomerOrders.Add(
-                    new CustomerOrder
+                order.CustomerOrders.Add(new CustomerOrder
                     {
                         CustomerId = customerId
                     });
@@ -122,8 +110,7 @@ namespace CustomerOrderManagement.Application.Services
 
             _unitOfWork.SaveChanges();
 
-            var createdOrder = _unitOfWork.Orders
-                .GetByIdWithCustomers(order.Id);
+            var createdOrder = _unitOfWork.Orders.GetByIdWithCustomers(order.Id);
 
             return new ResultDto<OrderDto>
             {
@@ -135,56 +122,40 @@ namespace CustomerOrderManagement.Application.Services
 
         public ResultDto<OrderDto> Update(int id,UpdateOrderDto request)
         {
-            var order = _unitOfWork.Orders
-                .GetByIdWithCustomers(id);
+            var order = _unitOfWork.Orders.GetByIdWithCustomers(id);
 
             if (order == null)
             {
-                throw new NotFoundException(
-                    "Order not found.",
-                    "ORDER_NOT_FOUND");
+                throw new NotFoundException("Order not found.","ORDER_NOT_FOUND");
             }
 
             var validationResult = _updateValidator.Validate(request);
 
             if (!validationResult.IsValid)
             {
-                throw new Exceptions.ValidationException(
-                    validationResult.Errors
-                        .Select(x => x.ErrorMessage)
-                        .ToList());
+                throw new Exceptions.ValidationException(validationResult.Errors.Select(x => x.ErrorMessage).ToList());
             }
 
             _mapper.Map(request, order);
 
-            var newCustomerIds = request.CustomerIds
-                .Distinct()
-                .ToHashSet();
+            var newCustomerIds = request.CustomerIds.Distinct().ToHashSet();
 
-            var currentCustomerIds = order.CustomerOrders
-                .Select(x => x.CustomerId)
-                .ToHashSet();
+            var currentCustomerIds = order.CustomerOrders.Select(x => x.CustomerId).ToHashSet();
 
-            var customerIdsToRemove = currentCustomerIds
-                .Except(newCustomerIds)
-                .ToList();
+            var customerIdsToRemove = currentCustomerIds.Except(newCustomerIds).ToList();
 
             foreach (var customerId in customerIdsToRemove)
             {
-                var customerOrder = order.CustomerOrders
-                    .First(x => x.CustomerId == customerId);
+                var customerOrder = order.CustomerOrders.First(x => x.CustomerId == customerId);
 
                 order.CustomerOrders.Remove(customerOrder);
             }
 
-            var customerIdsToAdd = newCustomerIds
-                .Except(currentCustomerIds)
-                .ToList();
+            var customerIdsToAdd = newCustomerIds.Except(currentCustomerIds).ToList();
 
             foreach (var customerId in customerIdsToAdd)
             {
-                order.CustomerOrders.Add(
-                    new CustomerOrder
+                order.CustomerOrders.Add(new CustomerOrder
                     {
                         OrderId = order.Id,
                         CustomerId = customerId
@@ -195,8 +166,7 @@ namespace CustomerOrderManagement.Application.Services
 
             _unitOfWork.SaveChanges();
 
-            var updatedOrder = _unitOfWork.Orders
-                .GetByIdWithCustomers(id);
+            var updatedOrder = _unitOfWork.Orders.GetByIdWithCustomers(id);
 
             return new ResultDto<OrderDto>
             {
@@ -208,14 +178,11 @@ namespace CustomerOrderManagement.Application.Services
 
         public ResultDto<bool> Delete(int id)
         {
-            var order = _unitOfWork.Orders
-                .GetByIdWithCustomers(id);
+            var order = _unitOfWork.Orders.GetByIdWithCustomers(id);
 
             if (order == null)
             {
-                throw new NotFoundException(
-                    "Order not found.",
-                    "ORDER_NOT_FOUND");
+                throw new NotFoundException("Order not found.","ORDER_NOT_FOUND");
             }
 
             foreach (var customerOrder in order.CustomerOrders.ToList())

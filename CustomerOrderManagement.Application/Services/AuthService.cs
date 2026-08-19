@@ -10,21 +10,15 @@ namespace CustomerOrderManagement.Application.Services
         private readonly IIdentityService _identityService;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public AuthService(
-            IIdentityService identityService,
-            IJwtTokenGenerator jwtTokenGenerator)
+        public AuthService(IIdentityService identityService,IJwtTokenGenerator jwtTokenGenerator)
         {
             _identityService = identityService;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public ResultDto<LoginResponseDto> Register(
-            RegisterDto request)
+        public ResultDto<LoginResponseDto> Register(RegisterDto request)
         {
-            var createUserResult =
-                _identityService.CreateUser(
-                    request.Email,
-                    request.Password);
+            var createUserResult = _identityService.CreateUser(request.Email,request.Password);
 
             if (!createUserResult.Success)
             {
@@ -37,9 +31,7 @@ namespace CustomerOrderManagement.Application.Services
                 };
             }
 
-            var userResult =
-                _identityService.GetUserByEmail(
-                    request.Email);
+            var userResult = _identityService.GetUserByEmail(request.Email);
 
             if (!userResult.Success || userResult.Data == null)
             {
@@ -53,8 +45,7 @@ namespace CustomerOrderManagement.Application.Services
 
             ApplicationUser user = userResult.Data;
 
-            var roleResult =
-                _identityService.GetUserRole(user.Id);
+            var roleResult = _identityService.GetUserRole(user.Id);
 
             if (!roleResult.Success ||
                 string.IsNullOrWhiteSpace(roleResult.Data))
@@ -67,10 +58,7 @@ namespace CustomerOrderManagement.Application.Services
                 };
             }
 
-            var token =
-                _jwtTokenGenerator.GenerateToken(
-                    user,
-                    roleResult.Data);
+            var token = _jwtTokenGenerator.GenerateToken(user,roleResult.Data);
 
             return new ResultDto<LoginResponseDto>
             {
@@ -80,15 +68,11 @@ namespace CustomerOrderManagement.Application.Services
             };
         }
 
-        public ResultDto<LoginResponseDto> Login(
-            LoginDto request)
+        public ResultDto<LoginResponseDto> Login(LoginDto request)
         {
-            var userResult =
-                _identityService.GetUserByEmail(
-                    request.Email);
+            var userResult =_identityService.GetUserByEmail(request.Email);
 
-            if (!userResult.Success ||
-                userResult.Data == null)
+            if (!userResult.Success || userResult.Data == null)
             {
                 return new ResultDto<LoginResponseDto>
                 {
@@ -100,10 +84,7 @@ namespace CustomerOrderManagement.Application.Services
 
             ApplicationUser user = userResult.Data;
 
-            var passwordResult =
-                _identityService.CheckPassword(
-                    user,
-                    request.Password);
+            var passwordResult = _identityService.CheckPassword(user, request.Password);
 
             if (!passwordResult.Success)
             {
@@ -116,12 +97,9 @@ namespace CustomerOrderManagement.Application.Services
                 };
             }
 
-            var roleResult =
-                _identityService.GetUserRole(
-                    user.Id);
+            var roleResult =_identityService.GetUserRole(user.Id);
 
-            if (!roleResult.Success ||
-                string.IsNullOrWhiteSpace(roleResult.Data))
+            if (!roleResult.Success || string.IsNullOrWhiteSpace(roleResult.Data))
             {
                 return new ResultDto<LoginResponseDto>
                 {
@@ -131,10 +109,7 @@ namespace CustomerOrderManagement.Application.Services
                 };
             }
 
-            var token =
-                _jwtTokenGenerator.GenerateToken(
-                    user,
-                    roleResult.Data);
+            var token = _jwtTokenGenerator.GenerateToken(user,roleResult.Data);
 
             return new ResultDto<LoginResponseDto>
             {

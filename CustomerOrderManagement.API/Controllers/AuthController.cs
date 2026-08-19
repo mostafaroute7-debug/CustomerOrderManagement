@@ -22,8 +22,7 @@ namespace CustomerOrderManagement.API.Controllers
         {
             if (request == null)
             {
-                return Content(
-                    HttpStatusCode.BadRequest,
+                return Content(HttpStatusCode.BadRequest,
                     new
                     {
                         Success = false,
@@ -35,9 +34,7 @@ namespace CustomerOrderManagement.API.Controllers
 
             if (!result.Success)
             {
-                return Content(
-                    HttpStatusCode.Unauthorized,
-                    result);
+                return Content( HttpStatusCode.Unauthorized,result);
             }
 
             return Ok(result);
@@ -50,8 +47,7 @@ namespace CustomerOrderManagement.API.Controllers
         {
             if (request == null)
             {
-                return Content(
-                    HttpStatusCode.BadRequest,
+                return Content( HttpStatusCode.BadRequest,
                     new
                     {
                         Success = false,
@@ -63,9 +59,7 @@ namespace CustomerOrderManagement.API.Controllers
 
             if (!result.Success)
             {
-                return Content(
-                    HttpStatusCode.BadRequest,
-                    result);
+                return Content(HttpStatusCode.BadRequest,result);
             }
 
             return Ok(result);

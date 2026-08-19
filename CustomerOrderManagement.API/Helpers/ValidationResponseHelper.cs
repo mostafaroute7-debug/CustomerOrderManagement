@@ -10,10 +10,7 @@ namespace CustomerOrderManagement.API.Helpers
         {
             var errors = controller.ModelState
                 .Where(x => x.Value.Errors.Any())
-                .SelectMany(x => x.Value.Errors.Select(e =>
-                    string.Format(
-                        "{0}: {1}",
-                        x.Key,
+                .SelectMany(x => x.Value.Errors.Select(e =>string.Format("{0}: {1}",x.Key,
                         string.IsNullOrWhiteSpace(e.ErrorMessage)? "Invalid value.": e.ErrorMessage))).ToList();
 
             return new ResultDto<object>

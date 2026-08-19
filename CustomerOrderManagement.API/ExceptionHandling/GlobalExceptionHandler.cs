@@ -90,11 +90,7 @@ namespace CustomerOrderManagement.API.ExceptionHandling
             };
 
 
-            context.Result =
-                new ResponseMessageResult(
-                    context.Request.CreateResponse(
-                        statusCode,
-                        result));
+            context.Result = new ResponseMessageResult(context.Request.CreateResponse(statusCode,result));
         }
     }
 }

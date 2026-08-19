@@ -16,7 +16,6 @@ namespace CustomerOrderManagement.API.Logging
             Directory.CreateDirectory(logDirectory);
 
             Log.Logger = new LoggerConfiguration().MinimumLevel.Information()
-
                 .WriteTo.File(
                     Path.Combine(logDirectory, "app-.log"),
                     rollingInterval: RollingInterval.Day,
@@ -27,7 +26,6 @@ namespace CustomerOrderManagement.API.Logging
                         "[{Level:u3}] " +
                         "{Message:lj}{NewLine}" +
                         "{Exception}{NewLine}")
-
                 .CreateLogger();
         }
     }

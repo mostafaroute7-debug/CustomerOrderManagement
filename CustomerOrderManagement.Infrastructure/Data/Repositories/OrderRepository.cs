@@ -8,8 +8,7 @@ namespace CustomerOrderManagement.Infrastructure.Data.Repositories
 {
     public class OrderRepository : GenaricRepository<Order>,IOrderRepository
     {
-        public OrderRepository(ApplicationDbContext context)
-       : base(context)
+        public OrderRepository(ApplicationDbContext context): base(context)
         {
         }
 
@@ -19,9 +18,7 @@ namespace CustomerOrderManagement.Infrastructure.Data.Repositories
         }
         public Order GetByIdWithCustomers(int id)
         {
-            return DbSet
-                .Include("CustomerOrders.Customer")
-                .FirstOrDefault(x => x.Id == id);
+            return DbSet.Include("CustomerOrders.Customer").FirstOrDefault(x => x.Id == id);
         }
 
     }

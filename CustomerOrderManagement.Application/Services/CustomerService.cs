@@ -77,9 +77,7 @@ namespace CustomerOrderManagement.Application.Services
 
             if (customer == null)
             {
-                throw new NotFoundException(
-                    "Customer not found.",
-                    "CUSTOMER_NOT_FOUND");
+                throw new NotFoundException("Customer not found.","CUSTOMER_NOT_FOUND");
             }
 
             var dto = _mapper.Map<CustomerDto>(customer);
@@ -126,9 +124,7 @@ namespace CustomerOrderManagement.Application.Services
 
             if (customer == null)
             {
-                throw new NotFoundException(
-                    "Customer not found.",
-                    "CUSTOMER_NOT_FOUND");
+                throw new NotFoundException("Customer not found.","CUSTOMER_NOT_FOUND");
             }
             var validationResult = _updateValidator.Validate(request);
 
@@ -162,9 +158,7 @@ namespace CustomerOrderManagement.Application.Services
 
             if (customer == null)
             {
-                throw new NotFoundException(
-                    "Customer not found.",
-                    "CUSTOMER_NOT_FOUND");
+                throw new NotFoundException("Customer not found.","CUSTOMER_NOT_FOUND");
             }
 
             _unitOfWork.Customers.Delete(customer);
