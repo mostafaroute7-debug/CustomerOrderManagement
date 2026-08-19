@@ -9,7 +9,7 @@ namespace CustomerOrderManagement.Infrastructure.Data.Configurations
             ToTable("Orders");
 
             Property(x => x.CreatedAt)
-    .HasColumnName("OrderDate");
+                .HasColumnName("OrderDate");
 
             Property(x => x.TotalAmount)
                 .HasPrecision(18, 2)

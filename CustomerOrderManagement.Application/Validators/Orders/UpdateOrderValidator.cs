@@ -41,19 +41,15 @@ namespace CustomerOrderManagement.Application.Validators.Orders
             if (customerIds == null)
                 return true;
 
-            return customerIds.Distinct().Count()
-                == customerIds.Count;
+            return customerIds.Distinct().Count() == customerIds.Count;
         }
 
-        private bool AllCustomersExist(
-            List<int> customerIds)
+        private bool AllCustomersExist(List<int> customerIds)
         {
             if (customerIds == null || !customerIds.Any())
                 return true;
 
-            var existingCount = _unitOfWork.Customers
-                .GetAll()
-                .Count(x => customerIds.Contains(x.Id));
+            var existingCount = _unitOfWork.Customers.GetAll().Count(x => customerIds.Contains(x.Id));
 
             return existingCount == customerIds.Distinct().Count();
         }

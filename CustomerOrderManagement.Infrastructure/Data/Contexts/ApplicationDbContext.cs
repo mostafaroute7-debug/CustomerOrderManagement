@@ -8,8 +8,7 @@ namespace CustomerOrderManagement.Infrastructure.Data.Contexts
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-           : base("name=DefaultConnection")
+        public ApplicationDbContext(): base("name=DefaultConnection")
         {
         }
 
@@ -17,8 +16,7 @@ namespace CustomerOrderManagement.Infrastructure.Data.Contexts
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Configurations
-                .AddFromAssembly(typeof(ApplicationDbContext).Assembly);
+            modelBuilder.Configurations.AddFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
 
         #region DbSets

@@ -1,6 +1,5 @@
 ﻿using CustomerOrderManagement.Application.DTOs.Orders;
 using CustomerOrderManagement.Application.Interfaces;
-using CustomerOrderManagement.Application.Interfaces.Repositories;
 using FluentValidation;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,14 +35,12 @@ namespace CustomerOrderManagement.Application.Validators.Orders
                 .WithMessage("One or more customers were not found.");
         }
 
-        private bool HaveUniqueCustomerIds(
-            List<int> customerIds)
+        private bool HaveUniqueCustomerIds(List<int> customerIds)
         {
             if (customerIds == null)
                 return true;
 
-            return customerIds.Distinct().Count()
-                == customerIds.Count;
+            return customerIds.Distinct().Count() == customerIds.Count;
         }
 
         private bool AllCustomersExist(
@@ -52,9 +49,7 @@ namespace CustomerOrderManagement.Application.Validators.Orders
             if (customerIds == null || !customerIds.Any())
                 return true;
 
-            var existingCount = _unitOfWork.Customers
-                .GetAll()
-                .Count(x => customerIds.Contains(x.Id));
+            var existingCount = _unitOfWork.Customers.GetAll().Count(x => customerIds.Contains(x.Id));
 
             return existingCount == customerIds.Distinct().Count();
         }
