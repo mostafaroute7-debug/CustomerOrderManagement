@@ -251,6 +251,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DatabaseInitializer.cs" />
     <Compile Include="DependencyInjection\AutofacConfig.cs" />
     <Compile Include="ExceptionHandling\GlobalExceptionHandler.cs" />
     <Compile Include="Global.asax.cs">

@@ -13,16 +13,11 @@ namespace CustomerOrderManagement.API
         protected void Application_Start()
         {
             LoggerConfig.Configure();
-            //Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.File(
-            //            path: "Logs/api-.log",
-            //            rollingInterval: RollingInterval.Day,
-            //            retainedFileCountLimit: 30)
-            //            .CreateLogger();
 
             AreaRegistration.RegisterAllAreas();
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
-
+            DatabaseInitializer.Initialize();
             AutofacConfig.Register();
 
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

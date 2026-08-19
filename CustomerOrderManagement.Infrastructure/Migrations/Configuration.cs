@@ -6,14 +6,14 @@
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Data.Entity.Migrations;
-    internal sealed class Configuration : DbMigrationsConfiguration<CustomerOrderManagement.Infrastructure.Data.Contexts.ApplicationDbContext>
+    public sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(CustomerOrderManagement.Infrastructure.Data.Contexts.ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
             SeedRoles(context);
             SeedUsers(context);
@@ -77,9 +77,7 @@
 
             if (!result.Succeeded)
             {
-                throw new Exception(
-                    $"Failed to create seed user {email}: " +
-                    string.Join(", ", result.Errors));
+                throw new Exception($"Failed to create seed user {email}: " +string.Join(", ", result.Errors));
             }
 
             userManager.AddToRole(user.Id, role);
